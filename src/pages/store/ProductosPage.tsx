@@ -1,58 +1,53 @@
-import { useMemo, useState } from "react";
+import { useCallback, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useDebounce } from "../../hooks/useDebounce";
+import { useApi } from "../../hooks/useApi";
+import { useTipoCambio } from "../../hooks/useTipoCambio";
+import { productosService } from "../../services/productos";
 import { Search, SlidersHorizontal } from "lucide-react";
 
 import ProductCard from "../../components/products/ProductCard";
-import { productosIniciales } from "../../data/productos";
 import { CATEGORIAS_PERMITIDAS } from "../../constants/categorias";
 import type { Producto } from "../../types/producto";
 import { useCart } from "../../hooks/useCart";
-import { useDebounce } from "../../hooks/useDebounce";
 
-function normalizarCategoria(categoria: string): string {
-  return categoria
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim();
-}
-
-const categoriasNormalizadas = new Set(
-  CATEGORIAS_PERMITIDAS.map(normalizarCategoria),
-);
+const POR_PAGINA = 6;
 
 export default function ProductosPage() {
-  const [busqueda, setBusqueda] = useState("");
-  const busquedaPausada = useDebounce(busqueda, 3000);
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todas");
+  const [params, setParams] = useSearchParams();
+  const numeroPagina = Number(params.get("pagina") ?? 1);
+  const pagina = Number.isSafeInteger(numeroPagina) && numeroPagina > 0 ? numeroPagina : 1;
+  const categoriaUrl = params.get("categoria") ?? "Todas";
+  const categoriaSeleccionada = CATEGORIAS_PERMITIDAS.some((c) => c === categoriaUrl) ? categoriaUrl : "Todas";
+  const busqueda = params.get("buscar") ?? "";
+  const busquedaPausada = useDebounce(busqueda, 500);
   const [mensaje, setMensaje] = useState("");
+  const consulta = useCallback((signal: AbortSignal) =>
+    productosService.getPagina(pagina, POR_PAGINA, categoriaSeleccionada, busquedaPausada, signal),
+    [pagina, categoriaSeleccionada, busquedaPausada]);
+  const { data, cargando, error, recargar } = useApi(consulta);
+  const { mxnPorDolar, error: errorCambio, recargar: recargarCambio } = useTipoCambio();
+  const esperando = cargando || busqueda !== busquedaPausada;
+  const productosFiltrados = data?.productos ?? [];
 
-  // 1. Excluir todo producto que no pertenezca
-  // a las cinco categorías permitidas.
-  const productosPermitidos = useMemo(
-    () =>
-      productosIniciales.filter(
-        (producto) =>
-          producto.category !== null &&
-          categoriasNormalizadas.has(normalizarCategoria(producto.category)),
-      ),
-    [],
-  );
-
-  // 2. Aplicar búsqueda y categoría seleccionada.
-  const productosFiltrados = useMemo(() => {
-    const texto = normalizarCategoria(busquedaPausada);
-
-    return productosPermitidos.filter((producto) => {
-      const coincideNombre = normalizarCategoria(producto.name).includes(texto);
-
-      const coincideCategoria =
-        categoriaSeleccionada === "Todas" ||
-        normalizarCategoria(producto.category ?? "") ===
-          normalizarCategoria(categoriaSeleccionada);
-
-      return coincideNombre && coincideCategoria;
+  function cambiarFiltros(categoria: string, buscar: string) {
+    setParams((anteriores) => {
+      const siguientes = new URLSearchParams(anteriores);
+      siguientes.set("pagina", "1");
+      if (categoria === "Todas") siguientes.delete("categoria");
+      else siguientes.set("categoria", categoria);
+      if (buscar) siguientes.set("buscar", buscar);
+      else siguientes.delete("buscar");
+      return siguientes;
+    }, { replace: true });
+  }
+  function irAPagina(nueva: number) {
+    setParams((anteriores) => {
+      const siguientes = new URLSearchParams(anteriores);
+      siguientes.set("pagina", String(nueva));
+      return siguientes;
     });
-  }, [productosPermitidos, busquedaPausada, categoriaSeleccionada]);
+  }
 
   const { agregar } = useCart();
 
@@ -95,7 +90,7 @@ export default function ProductosPage() {
               id="buscar-productos"
               type="search"
               value={busqueda}
-              onChange={(event) => setBusqueda(event.target.value)}
+              onChange={(event) => cambiarFiltros(categoriaSeleccionada, event.target.value)}
               placeholder="Ej. arroz, leche, detergente..."
               className="w-full border-0 bg-transparent py-3 text-sm outline-none focus:ring-0"
             />
@@ -119,7 +114,7 @@ export default function ProductosPage() {
                 <button
                   key={categoria}
                   type="button"
-                  onClick={() => setCategoriaSeleccionada(categoria)}
+                  onClick={() => cambiarFiltros(categoria, busqueda)}
                   aria-pressed={seleccionada}
                   className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                     seleccionada
@@ -146,8 +141,8 @@ export default function ProductosPage() {
             <p className="text-sm text-gray-500">
               {productosFiltrados.length}{" "}
               {productosFiltrados.length === 1
-                ? "producto encontrado"
-                : "productos encontrados"}
+                ? "producto en esta página"
+                : "productos en esta página"}
             </p>
           </div>
 
@@ -160,12 +155,19 @@ export default function ProductosPage() {
             </p>
           )}
 
-          {productosFiltrados.length > 0 ? (
+          {errorCambio && <p role="status" className="mb-4 text-sm text-amber-800">No se pudo obtener la conversión a USD. Los precios en MXN siguen disponibles. <button type="button" onClick={recargarCambio} className="underline">Reintentar conversión</button></p>}
+          {esperando ? <p role="status">Cargando productos...</p> : error ? (
+            <div role="alert" className="rounded-xl bg-red-50 p-4 text-red-800">
+              <p>No se pudo cargar el catálogo: {error}</p>
+              <button type="button" onClick={recargar} className="mt-2 underline">Reintentar</button>
+            </div>
+          ) : productosFiltrados.length > 0 ? (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {productosFiltrados.map((producto) => (
                 <ProductCard
                   key={producto.id}
                   producto={producto}
+                  mxnPorDolar={mxnPorDolar}
                   onAgregar={manejarAgregar}
                 />
               ))}
@@ -185,8 +187,7 @@ export default function ProductosPage() {
               <button
                 type="button"
                 onClick={() => {
-                  setBusqueda("");
-                  setCategoriaSeleccionada("Todas");
+                  cambiarFiltros("Todas", "");
                 }}
                 className="mt-5 font-semibold text-green-700 hover:text-green-800"
               >
@@ -194,6 +195,11 @@ export default function ProductosPage() {
               </button>
             </div>
           )}
+          <nav aria-label="Paginación del catálogo" className="mt-8 flex items-center justify-center gap-4">
+            <button type="button" disabled={esperando || pagina <= 1} onClick={() => irAPagina(pagina - 1)} className="rounded-lg border px-4 py-2 disabled:opacity-40">Anterior</button>
+            <span aria-live="polite">Página {pagina}</span>
+            <button type="button" disabled={esperando || !!error || !data?.hayMas} onClick={() => irAPagina(pagina + 1)} className="rounded-lg border px-4 py-2 disabled:opacity-40">Siguiente</button>
+          </nav>
         </section>
       </div>
     </main>
