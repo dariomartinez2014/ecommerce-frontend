@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../../hooks/useCart";
 import {
   Menu,
   Search,
@@ -17,6 +18,8 @@ type HeaderProps = {
 
 export default function Header({ variant, onMenuClick }: HeaderProps) {
   const [menuAbierto, setMenuAbierto] = useState(false);
+
+  const { totalUnidades } = useCart();
 
   const esAdmin = variant === "admin";
 
@@ -104,10 +107,11 @@ export default function Header({ variant, onMenuClick }: HeaderProps) {
             <>
               <Link
                 to="/carrito"
-                aria-label="Ver carrito"
-                className="rounded-lg p-2 text-gray-600 hover:bg-green-50"
+                aria-label={`Ver carrito (${totalUnidades} productos)`}
+                className="relative rounded-lg p-2 text-gray-600 hover:bg-green-50"
               >
                 <ShoppingCart size={21} />
+                {totalUnidades > 0 && <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-green-700 px-1 text-center text-xs leading-5 text-white">{totalUnidades}</span>}
               </Link>
 
               <Link

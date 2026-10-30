@@ -9,6 +9,8 @@ import HomePage from "./pages/store/HomePage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import ProductosPage from "./pages/store/ProductosPage";
 import CarritoPage from "./pages/store/CarritoPage";
+import PagoPage from "./pages/store/PagoPage";
+import MisOrdenesPage from "./pages/store/MisOrdenesPage";
 
 function PaginaPendiente({ titulo }: { titulo: string }) {
   return (
@@ -35,15 +37,12 @@ export default function App() {
 
           <Route path="/productos" element={<ProductosPage />} />
           <Route path="/carrito" element={<CarritoPage />} />
+          <Route path="/pago" element={<PagoPage />} />
           <Route
             path="mis-ordenes"
-            element={<PaginaPendiente titulo="Mis órdenes" />}
+            element={<MisOrdenesPage />}
           />
 
-          <Route
-            path="carrito"
-            element={<PaginaPendiente titulo="Mi carrito" />}
-          />
 
           <Route
             path="login"

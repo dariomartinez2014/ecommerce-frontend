@@ -12,6 +12,7 @@ export default function CarritoPage() {
     disminuir,
     eliminar,
     vaciar,
+    errorGuardado,
   } = useCart();
 
   const formatoMoneda = (precio: number) =>
@@ -171,17 +172,13 @@ export default function CarritoPage() {
               </span>
             </div>
 
-            <button
-              type="button"
-              disabled
-              title="Disponible cuando implementemos el proceso de compra"
-              className="mt-6 w-full cursor-not-allowed rounded-xl bg-gray-300 px-4 py-3 font-semibold text-gray-600"
-            >
-              Continuar con la compra
-            </button>
+            {errorGuardado && <p role="alert" className="mt-4 text-sm text-amber-800">{errorGuardado}</p>}
+            <Link to="/pago" className="mt-6 block w-full rounded-xl bg-green-700 px-4 py-3 text-center font-semibold text-white hover:bg-green-800">
+              Continuar al pago simulado
+            </Link>
 
             <p className="mt-3 text-center text-xs text-gray-400">
-              El proceso de compra lo implementaremos después.
+              Práctica de clase: no se cobra dinero.
             </p>
           </aside>
         </div>
