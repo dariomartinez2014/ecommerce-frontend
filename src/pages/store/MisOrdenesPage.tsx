@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí guardo el estado compartido de MisOrdenesPage y las acciones que lo actualizan.
 import { Link, useSearchParams } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";
 

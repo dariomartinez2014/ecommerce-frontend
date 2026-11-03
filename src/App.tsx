@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí organizo la aplicación: junto las pantallas o componentes que se ven al entrar.
 import { BrowserRouter, HashRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 
 const Router = import.meta.env.BASE_URL === "/" ? BrowserRouter : HashRouter;

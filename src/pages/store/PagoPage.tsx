@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí guardo el estado compartido de PagoPage y las acciones que lo actualizan.
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";

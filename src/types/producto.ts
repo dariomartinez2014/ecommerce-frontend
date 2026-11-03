@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí describo la forma de los datos con TypeScript. Estos tipos no ejecutan validaciones en el servidor.
 // Producto que devuelve la API
 export type Producto = {
   id: number;

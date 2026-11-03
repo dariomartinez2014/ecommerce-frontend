@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí organizo la pantalla DashboardPage con sus datos, controles y componentes visibles.
 import { Package, ClipboardList, Users } from "lucide-react";
 
 const metricas = [

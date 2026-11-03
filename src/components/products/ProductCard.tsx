@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí preparo el componente ProductCard para reutilizar su presentación y los eventos que recibe.
 import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import type { Producto } from "../../types/producto";

@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí comparto carrito y órdenes de práctica y los conservo en el navegador; el pago de este ejercicio es simulado.
 import { createContext, useCallback, useRef, useState, type ReactNode } from "react";
 import type { Producto } from "../types/producto";
 import type { EstadoCompra, ItemCarrito, OrdenSimulada } from "../types/compra";

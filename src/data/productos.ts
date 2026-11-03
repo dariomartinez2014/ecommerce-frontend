@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí reúno los valores de productos que utiliza la aplicación; este archivo por sí solo no es una base de datos.
 import type { Producto } from "../types/producto";
 
 export const productosIniciales: Producto[] = [

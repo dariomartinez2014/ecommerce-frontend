@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí guardo el estado compartido de HomePage y las acciones que lo actualizan.
 import { Link } from "react-router-dom";
 import { ShoppingBasket, ArrowRight } from "lucide-react";
 

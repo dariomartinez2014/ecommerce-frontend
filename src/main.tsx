@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí monto la aplicación y conecto su entrada con el elemento raíz del HTML.
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 

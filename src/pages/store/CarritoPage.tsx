@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí guardo el estado compartido de CarritoPage y las acciones que lo actualizan.
 import { Link } from "react-router-dom";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 

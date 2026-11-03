@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí guardo el estado compartido de ProductosPage y las acciones que lo actualizan.
 import { useCallback, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "../../hooks/useDebounce";

@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí preparo la consulta del tipo de cambio y su estado para mostrar los precios.
 import { useApi } from "./useApi";
 import { tipoCambioService } from "../services/tipoCambio";
 

@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí reúno la lógica de StoreLayout que utiliza esta parte del proyecto.
 import { Outlet, Link } from "react-router-dom";
 import Header from "./Header";
 

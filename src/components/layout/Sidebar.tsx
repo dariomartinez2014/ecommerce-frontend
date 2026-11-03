@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí preparo el componente Sidebar para reutilizar su presentación y los eventos que recibe.
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,

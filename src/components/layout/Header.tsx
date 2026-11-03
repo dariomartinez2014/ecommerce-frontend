@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí preparo el componente Header para reutilizar su presentación y los eventos que recibe.
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";

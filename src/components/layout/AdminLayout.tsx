@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí reúno la lógica de AdminLayout que utiliza esta parte del proyecto.
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";

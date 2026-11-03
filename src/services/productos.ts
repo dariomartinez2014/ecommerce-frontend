@@ -1,7 +1,9 @@
+// Apunte de estudio: Aquí agrupo las peticiones de productos para que los componentes no repitan las llamadas HTTP.
 import { api } from "../lib/axios";
 import { CATEGORIAS_PERMITIDAS } from "../constants/categorias";
 import type { Producto } from "../types/producto";
 
+// Aquí normalizo el texto para poder comparar las búsquedas de forma consistente.
 export function normalizar(texto: string): string {
   return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 }

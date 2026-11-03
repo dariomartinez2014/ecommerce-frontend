@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí agrupo las peticiones de tipoCambio para que los componentes no repitan las llamadas HTTP.
 interface RespuestaTipoCambio {
   result: string;
   rates: Record<string, number>;

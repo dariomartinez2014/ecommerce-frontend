@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí reúno datos, carga, error y reintento. Cancelo la petición al salir para ignorar respuestas tardías.
 import { useCallback, useEffect, useState } from "react";
 
 export interface UseApiResult<T> {
@@ -13,6 +14,7 @@ export function useApi<T>(fetchFn: (signal: AbortSignal) => Promise<T>): UseApiR
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [contador, setContador] = useState(0);
+  // Aquí inicio o actualizo la consulta cuando cambian sus dependencias.
   useEffect(() => {
     const controller = new AbortController();
     // Reiniciar el estado al sincronizar con una nueva petición externa.

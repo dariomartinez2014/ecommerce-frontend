@@ -1,3 +1,4 @@
+// Apunte de estudio: Aquí valido y transformo el carrito y las órdenes simuladas que se guardan en el navegador.
 import type { EstadoCompra, ItemCarrito, OrdenSimulada } from "../types/compra";
 
 export const CLAVE_COMPRA = "abarrotes-verde-compra-v1";
